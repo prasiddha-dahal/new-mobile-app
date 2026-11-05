@@ -1,0 +1,22 @@
+# Configuration for `flutter gen-l10n`, which runs automatically because
+# pubspec.yaml sets `flutter: generate: true`.
+#
+# Add a string: put it in app_en.arb with an `@key` description, mirror it in
+# app_ne.arb, run `flutter pub get`. See docs/localization.md.
+
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-dir: lib/l10n/generated
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+
+# Untranslated keys are a build-time warning rather than silence. The
+# localization_test also fails on them, so a half-translated key cannot
+# reach a release unnoticed.
+untranslated-messages-file: lib/l10n/untranslated.txt
+
+# `AppLocalizations.of(context)` returns null when the delegates are not
+# installed (a bare MaterialApp in a widget test, say) instead of throwing.
+# `context.l10n` in lib/core/l10n/l10n_extension.dart turns that into an
+# English fallback, so a widget never crashes over missing delegates.
+nullable-getter: true

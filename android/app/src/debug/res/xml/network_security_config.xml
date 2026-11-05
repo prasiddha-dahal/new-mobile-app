@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug-only network policy.
+
+  The app targets API 36, where Android blocks plaintext HTTP by default. Local
+  development needs it: the API runs over http on the developer's machine,
+  reached as 10.0.2.2 from an emulator, or as localhost from a USB device via
+  `adb reverse tcp:8000 tcp:8000`.
+
+  This file lives in src/debug, so it is merged into debug builds only. Release
+  builds keep Android's default deny-all policy and can only speak HTTPS —
+  which is all production needs, since the API is served over TLS.
+
+  base-config rather than a domain list: <domain> matches exact hostnames, not
+  CIDR ranges, so it cannot express "any machine on my LAN". Enumerating a
+  developer's IP would break for everyone else. Blanket cleartext in a
+  debug-only build is the honest trade.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

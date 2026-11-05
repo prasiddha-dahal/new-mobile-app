@@ -1,0 +1,161 @@
+name: sahayatri_care_connect
+description: "Sahayatri Physio - On-demand home physiotherapy across Nepal"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # A font asset, not a library -- nothing imports it, which is why an
+  # unused-dependency sweep removed it. But the SDK's own Cupertino widgets
+  # reference CupertinoIcons, and flutter_localizations pulls in
+  # GlobalCupertinoLocalizations, so the icon tree-shaker looks for the font
+  # and a release build warns it cannot find it. Reachable icon data with no
+  # font behind it renders as a missing glyph.
+  cupertino_icons: ^1.0.8
+
+  # Material/Cupertino/Widgets localisations for the locales we ship.
+  # Without these a Nepali locale still shows English date pickers and
+  # dialog buttons, because those strings come from the framework, not us.
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+
+  # Routing
+  go_router: ^14.6.2
+
+  # Networking
+  dio: ^5.7.0
+  retrofit: ^4.10.0
+
+  # Code generation
+  json_annotation: ^4.12.0
+
+  # Functional error handling
+  fpdart: ^1.1.1
+
+  # Runtime environment config (.env)
+  flutter_dotenv: ^5.2.1
+
+  # The payment gateways host their own checkout and redirect back to a URL
+  # configured server-side, so the app cannot hand them a deep link of its
+  # own. An in-app WebView is the only way to both show the checkout and see
+  # the return URL, which is where eSewa puts its signed callback blob.
+  webview_flutter: ^4.10.0
+
+  # Storage
+  flutter_secure_storage: ^9.2.4
+  shared_preferences: ^2.3.3
+
+  # Utilities
+  intl: ^0.20.2
+  geolocator: ^14.0.2
+  geocoding: ^5.0.0
+  image_picker: ^1.2.3
+  path_provider: ^2.1.6
+  url_launcher: ^6.3.3
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
+  flutter_svg: ^2.3.0
+  google_maps_flutter: ^2.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+  # Code generation. `retrofit_generator` is a builder and belongs here; it
+  # was in `dependencies`, where it shipped its whole analyzer chain as a
+  # runtime dependency of the app.
+  # `freezed` and `riverpod_generator` used to sit here. Neither emitted
+  # anything -- the repo has zero `@freezed` and zero `@riverpod` annotations
+  # -- but riverpod_generator 2.x pins `analyzer` 7.x, whose language version
+  # is 3.9. On Dart 3.13 the resolver parses dot-shorthand syntax the old
+  # analyzer cannot serialise, and the whole build dies with
+  # "Missing implementation of visitDotShorthandPropertyAccess". Two dead
+  # builders were holding the entire codegen chain a language version back.
+  build_runner: ^2.4.14
+  json_serializable: ^6.11.1
+  retrofit_generator: ^10.2.11
+
+  # Testing
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+
+  # Runs `gen-l10n` over lib/l10n/*.arb on `flutter pub get` and on every
+  # build, per l10n.yaml. Output lands in lib/l10n/generated/ and is
+  # gitignored — regenerate it, never hand-edit it.
+  generate: true
+
+  assets:
+    - assets/images/sahayatri-logo.svg
+
+    - assets/images/onboarding/welcome.webp
+    - assets/images/onboarding/onboarding1.webp
+    - assets/images/onboarding/onboarding2.webp
+    - assets/images/onboarding/for_patients.webp 
+    - assets/images/onboarding/for_therapists.webp 
+    - assets/images/onboarding/role_patient.webp 
+    - assets/images/onboarding/role_therapist.webp 
+
+    - assets/images/googleLogo/google-logo.png 
+
+    - assets/images/resetPassword/reset-password.webp 
+
+    - assets/images/paymentLogo/cash.png
+    - assets/images/paymentLogo/esewa-logo.webp
+    - assets/images/paymentLogo/khalti-logo.webp
+
+    # Runtime config, bundled so it can be read at runtime. Gitignored:
+    # copy .env.example to .env before the first build, or the build
+    # fails here with "unable to find asset".
+    - .env
+
+  # The three faces the design system names. Before this they were referenced
+  # by 126 `fontFamily:` sites and bundled nowhere, so every one of them fell
+  # back to the platform default -- silently, because Flutter substitutes
+  # rather than failing. The editorial look simply was not rendering.
+  #
+  # Inter and Fraunces upstream ship as variable fonts (Google Fonts has no
+  # static instances for either), so each weight below points at the same
+  # file and the engine instances the `wght` axis. IBM Plex Mono does ship
+  # statics, so it gets real per-weight files.
+  #
+  # All three are SIL Open Font License 1.1; see assets/fonts/OFL.txt.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 700
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Fraunces-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Fraunces-Variable.ttf
+          weight: 700
+    - family: IBM Plex Mono
+      fonts:
+        - asset: assets/fonts/IBMPlexMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/IBMPlexMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/IBMPlexMono-SemiBold.ttf
+          weight: 600
+
